@@ -3,21 +3,37 @@ const Event = require('../models/eventModel');
 const Web3 = require('web3');
 const TicketBooking = require('../artifacts/contracts/TicketBooking.sol/TicketBooking.json'); // Adjust the path if necessary
 
-const web3 = new Web3('http://127.0.0.1:8545'); // Hardhat Network URL
+// Create Web3 instance
+const web3 = new Web3(); // Create without a provider initially
+
+// Set the provider
+web3.setProvider('http://127.0.0.1:7545'); // Use the HTTP provider
+
 let contract;
 
 // Initialize the contract
 const initContract = async () => {
-    const networkId = await web3.eth.net.getId();
-    const deployedNetwork = TicketBooking.networks[networkId];
-    contract = new web3.eth.Contract(
-        TicketBooking.abi,
-        deployedNetwork.address
-    );
+    try {
+        const networkId = await web3.eth.net.getId();
+        const deployedNetwork = TicketBooking.networks[networkId];
+
+        if (!deployedNetwork) {
+            throw new Error(`Contract not deployed on the current network: ${networkId}`);
+        }
+
+        contract = new web3.eth.Contract(
+            TicketBooking.abi,
+            deployedNetwork.address
+        );
+
+        console.log(`Contract initialized at address: ${deployedNetwork.address}`);
+    } catch (error) {
+        console.error('Failed to initialize contract:', error);
+    }
 };
 
 // Call initContract once at the start of your application
-initContract();
+initContract().catch(err => console.error('Error during contract initialization:', err));
 
 exports.createTicket = async (req, res) => {
     const { eventId, price, resalePriceCap } = req.body;
@@ -46,6 +62,7 @@ exports.createTicket = async (req, res) => {
 
         res.status(201).json({ message: 'Ticket created successfully', ticket: newTicket });
     } catch (error) {
+        console.error('Error creating ticket:', error);
         res.status(500).json({ message: error.message });
     }
 };

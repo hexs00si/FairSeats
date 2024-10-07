@@ -1,7 +1,12 @@
 const Admin = require('../models/adminModel');
 const jwt = require('jsonwebtoken');
-const Web3 = require('web3').default;  // Import Web3 correctly
-const web3 = new Web3('http://127.0.0.1:7545'); // Connect to Ganache
+const Web3 = require('web3');
+
+// Create Web3 instance without a provider
+const web3 = new Web3(); 
+
+// Set the provider
+web3.setProvider('http://localhost:8545'); // Use the HTTP provider
 
 // Signup Controller
 exports.signup = async (req, res) => {
@@ -32,6 +37,7 @@ exports.signup = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
 // Login Controller (POST)
 exports.login = async (req, res) => {
     const { email, password } = req.body;

@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\Dell\\Desktop\\FairSeats\\Backend\\contracts\\TicketBooking.sol": {
-      "lastModificationDate": 1728304921092,
-      "contentHash": "d41d8cd98f00b204e9800998ecf8427e",
+      "lastModificationDate": 1728316718988,
+      "contentHash": "0471f7f7046b325d64ce7c035169a986",
       "sourceName": "contracts/TicketBooking.sol",
       "solcConfig": {
         "version": "0.8.0",
@@ -29,8 +29,12 @@
         }
       },
       "imports": [],
-      "versionPragmas": [],
-      "artifacts": []
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "TicketBooking"
+      ]
     }
   }
 }
